@@ -47,6 +47,7 @@ import kotlinx.android.synthetic.main.dialog_add_reading_list.*
 class AddReadingListDialogFragment(private val onListAdded: () -> Unit) : DialogFragment() {
 
 
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
     return inflater.inflate(R.layout.dialog_add_reading_list, container, false)
