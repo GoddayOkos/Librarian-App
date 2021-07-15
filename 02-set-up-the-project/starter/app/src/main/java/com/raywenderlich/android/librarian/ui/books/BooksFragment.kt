@@ -40,6 +40,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.raywenderlich.android.librarian.App
 import com.raywenderlich.android.librarian.R
 import com.raywenderlich.android.librarian.model.Book
 import com.raywenderlich.android.librarian.model.relations.BookAndGenre
@@ -54,65 +55,71 @@ private const val REQUEST_CODE_ADD_BOOK = 101
 
 class BooksFragment : Fragment() {
 
-  private val adapter by lazy { BookAdapter(::onItemLongTapped) }
-  private var filter: Filter? = null
+    private val adapter by lazy { BookAdapter(::onItemLongTapped) }
+    private var filter: Filter? = null
+    private val repository by lazy { App.repository }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-      savedInstanceState: Bundle?): View? {
-    return inflater.inflate(R.layout.fragment_books, container, false)
-  }
-
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    initUi()
-  }
-
-  override fun onStart() {
-    super.onStart()
-    loadBooks()
-  }
-
-  private fun initUi() {
-    pullToRefresh.setOnRefreshListener {
-      loadBooks()
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_books, container, false)
     }
 
-    booksRecyclerView.adapter = adapter
-    booksRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-    addBook.setOnClickListener {
-      startActivityForResult(AddBookActivity.getIntent(requireContext()), REQUEST_CODE_ADD_BOOK)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initUi()
     }
 
-    filterBooks.setOnClickListener {
-      val dialog = FilterPickerDialogFragment { filter ->
-        this.filter = filter
-
+    override fun onStart() {
+        super.onStart()
         loadBooks()
-      }
-
-      dialog.show(requireFragmentManager(), null)
     }
-  }
 
-  private fun loadBooks() {
-    pullToRefresh.isRefreshing = true
+    private fun initUi() {
+        pullToRefresh.setOnRefreshListener {
+            loadBooks()
+        }
 
-    val books = emptyList<BookAndGenre>() // TODO fetch from DB
+        booksRecyclerView.adapter = adapter
+        booksRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        addBook.setOnClickListener {
+            startActivityForResult(
+                AddBookActivity.getIntent(requireContext()),
+                REQUEST_CODE_ADD_BOOK
+            )
+        }
 
-    adapter.setData(books)
-    pullToRefresh.isRefreshing = false
-  }
+        filterBooks.setOnClickListener {
+            val dialog = FilterPickerDialogFragment { filter ->
+                this.filter = filter
 
-  private fun onItemLongTapped(book: Book) {
-    createAndShowDialog(requireContext(),
-        getString(R.string.delete_title),
-        getString(R.string.delete_message, book.name),
-        onPositiveAction = { removeBook(book) }
-    )
-  }
+                loadBooks()
+            }
 
-  private fun removeBook(book: Book) {
-    // TODO remove book
-    loadBooks()
-  }
+            dialog.show(requireFragmentManager(), null)
+        }
+    }
+
+    private fun loadBooks() {
+        pullToRefresh.isRefreshing = true
+
+        val books = repository.getBooks()
+
+        adapter.setData(books)
+        pullToRefresh.isRefreshing = false
+    }
+
+    private fun onItemLongTapped(book: Book) {
+        createAndShowDialog(requireContext(),
+            getString(R.string.delete_title),
+            getString(R.string.delete_message, book.name),
+            onPositiveAction = { removeBook(book) }
+        )
+    }
+
+    private fun removeBook(book: Book) {
+        // TODO remove book
+        loadBooks()
+    }
 }
