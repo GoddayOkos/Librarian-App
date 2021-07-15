@@ -35,15 +35,20 @@
 package com.raywenderlich.android.librarian
 
 import android.app.Application
+import com.raywenderlich.android.librarian.database.LibrarianDatabase
 
 class App : Application() {
 
-  companion object {
-    private lateinit var instance: App
-  }
+    companion object {
+        private lateinit var instance: App
 
-  override fun onCreate() {
-    super.onCreate()
-    instance = this
-  }
+        private val database: LibrarianDatabase by lazy {
+          LibrarianDatabase.buildDatabase(instance)
+        }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        instance = this
+    }
 }
