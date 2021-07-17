@@ -42,6 +42,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.raywenderlich.android.librarian.App
 import com.raywenderlich.android.librarian.R
+import com.raywenderlich.android.librarian.model.ReadingList
 import com.raywenderlich.android.librarian.model.relations.ReadingListsWithBooks
 import com.raywenderlich.android.librarian.ui.readingList.dialog.AddReadingListDialogFragment
 import com.raywenderlich.android.librarian.ui.readingListDetails.ReadingListDetailsActivity
@@ -52,7 +53,6 @@ import kotlinx.android.synthetic.main.fragment_reading_list.*
 class ReadingListFragment : Fragment() {
 
   private val adapter by lazy { ReadingListAdapter(::onItemSelected, ::onItemLongTapped) }
-  private val readingLists = listOf<ReadingListsWithBooks>()
 
   private val repository by lazy { App.repository }
 
@@ -74,7 +74,8 @@ class ReadingListFragment : Fragment() {
   }
 
   private fun loadReadingLists() {
-    adapter.setData(readingLists)
+    adapter.setData(repository.getReadingLists())
+    pullToRefresh.isRefreshing = false
   }
 
   private fun initListeners() {
@@ -83,6 +84,8 @@ class ReadingListFragment : Fragment() {
     addReadingList.setOnClickListener {
       showAddReadingListDialog()
     }
+
+    pullToRefresh.setOnRefreshListener { loadReadingLists() }
   }
 
   private fun showAddReadingListDialog() {
@@ -104,7 +107,7 @@ class ReadingListFragment : Fragment() {
   }
 
   private fun removeReadingList(readingList: ReadingListsWithBooks) {
-    // TODO remove reading list
+    repository.removeReadingList(ReadingList(readingList.id, readingList.name))
   }
 
   private fun onItemSelected(readingList: ReadingListsWithBooks) {
