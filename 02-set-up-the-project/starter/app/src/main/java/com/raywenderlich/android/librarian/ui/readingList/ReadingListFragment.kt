@@ -40,6 +40,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.raywenderlich.android.librarian.App
 import com.raywenderlich.android.librarian.R
 import com.raywenderlich.android.librarian.model.relations.ReadingListsWithBooks
 import com.raywenderlich.android.librarian.ui.readingList.dialog.AddReadingListDialogFragment
@@ -52,6 +53,8 @@ class ReadingListFragment : Fragment() {
 
   private val adapter by lazy { ReadingListAdapter(::onItemSelected, ::onItemLongTapped) }
   private val readingLists = listOf<ReadingListsWithBooks>()
+
+  private val repository by lazy { App.repository }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
@@ -70,7 +73,6 @@ class ReadingListFragment : Fragment() {
     readingListRecyclerView.adapter = adapter
   }
 
-  // TODO load from DB
   private fun loadReadingLists() {
     adapter.setData(readingLists)
   }

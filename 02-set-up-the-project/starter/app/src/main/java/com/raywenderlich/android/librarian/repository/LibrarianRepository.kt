@@ -5,12 +5,16 @@ import com.raywenderlich.android.librarian.model.Genre
 import com.raywenderlich.android.librarian.model.ReadingList
 import com.raywenderlich.android.librarian.model.Review
 import com.raywenderlich.android.librarian.model.relations.BookAndGenre
+import com.raywenderlich.android.librarian.model.relations.BookReview
+import com.raywenderlich.android.librarian.model.relations.ReadingListsWithBooks
 
 interface LibrarianRepository {
 
     fun addBook(book: Book)
 
     fun getBooks(): List<BookAndGenre>
+
+    fun getBookById(bookId: String): Book
 
     fun removeBook(book: Book)
 
@@ -22,7 +26,17 @@ interface LibrarianRepository {
 
     fun addReview(review: Review)
 
+    fun removeReview(review: Review)
+
+    fun getReviewById(reviewId: String): BookReview
+
+    fun getReviews(): List<BookReview>
+
     fun updateReview(review: Review)
 
     fun addReadingList(readingList: ReadingList)
+
+    fun getReadingLists(): List<ReadingListsWithBooks>
+
+    fun removeReadingList(readingList: ReadingList)
 }
