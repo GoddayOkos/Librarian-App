@@ -48,6 +48,7 @@ import com.raywenderlich.android.librarian.ui.addReview.AddBookReviewActivity
 import com.raywenderlich.android.librarian.ui.bookReviewDetails.BookReviewDetailsActivity
 import com.raywenderlich.android.librarian.utils.createAndShowDialog
 import kotlinx.android.synthetic.main.fragment_reviews.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

@@ -41,10 +41,12 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.raywenderlich.android.librarian.App
 import com.raywenderlich.android.librarian.R
 import com.raywenderlich.android.librarian.model.Genre
 import kotlinx.android.synthetic.main.dialog_filter_books.*
+import kotlinx.coroutines.launch
 
 class FilterPickerDialogFragment(private val onFilterSelected: (Filter?) -> Unit)
   : DialogFragment() {
@@ -61,7 +63,7 @@ class FilterPickerDialogFragment(private val onFilterSelected: (Filter?) -> Unit
     initUi()
   }
 
-  private fun initUi() {
+  private fun initUi() = lifecycleScope.launch {
     filterOptions.setOnCheckedChangeListener { _, checkedId ->
       updateOptions(checkedId)
     }
@@ -76,9 +78,9 @@ class FilterPickerDialogFragment(private val onFilterSelected: (Filter?) -> Unit
   }
 
   private fun filterBooks() {
-    val selectedGenre = repository.getGenres().firstOrNull { genre ->
+    val selectedGenre = lifecycleScope.launch {  repository.getGenres().firstOrNull { genre ->
       genre.name == genrePicker.selectedItem
-    }?.id
+    }?.id }.toString()
 
     val rating = ratingPicker.rating.toInt()
 

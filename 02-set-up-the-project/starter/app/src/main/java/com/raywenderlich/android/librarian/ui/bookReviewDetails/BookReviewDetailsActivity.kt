@@ -101,7 +101,7 @@ class BookReviewDetailsActivity : AppCompatActivity() {
     private fun displayData(reviewId: String) {
         refreshData(reviewId)
         val data = bookReview ?: return
-        val genre = repository.getGenreById(data.book.genreId)
+        val genre = lifecycleScope.launch { repository.getGenreById(data.book.genreId) } as Genre
 
         Glide.with(this).load(data.review.imageUrl).into(bookImage)
         reviewTitle.text = data.book.name

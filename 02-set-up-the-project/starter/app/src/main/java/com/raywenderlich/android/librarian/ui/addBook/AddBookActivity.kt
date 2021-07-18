@@ -63,7 +63,7 @@ class AddBookActivity : AppCompatActivity() {
         initUi()
     }
 
-    private fun initUi() {
+    private fun initUi() = lifecycleScope.launch {
         addBook.setOnClickListener { createBook() }
 
         genrePicker.adapter = ArrayAdapter(
@@ -73,7 +73,7 @@ class AddBookActivity : AppCompatActivity() {
         )
     }
 
-    private fun createBook() {
+    private fun createBook() = lifecycleScope.launch {
         val title = bookTitle.text.toString()
         val description = bookDescription.text.toString()
         val genreId = repository.getGenres().firstOrNull { it.name == genrePicker.selectedItem }?.id

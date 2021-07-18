@@ -28,11 +28,11 @@ class LibrarianRepositoryImpl(
 
     override suspend fun removeBook(book: Book) = bookDao.removeBook(book)
 
-    override fun getGenres(): List<Genre> = genreDao.getGenres()
+    override suspend fun getGenres(): List<Genre> = genreDao.getGenres()
 
-    override fun getGenreById(genreId: String): Genre = genreDao.getGenreById(genreId)
+    override suspend fun getGenreById(genreId: String): Genre = genreDao.getGenreById(genreId)
 
-    override fun addGenres(genres: List<Genre>) = genreDao.addGenres(genres)
+    override suspend fun addGenres(genres: List<Genre>) = genreDao.addGenres(genres)
 
     override suspend fun addReview(review: Review) = reviewDao.addReview(review)
 
@@ -57,7 +57,7 @@ class LibrarianRepositoryImpl(
     override suspend fun removeReadingList(readingList: ReadingList) =
         readingListDao.removeReadingList(readingList)
 
-    override fun getBooksByGenre(genreId: String): List<BookAndGenre> =
+    override suspend fun getBooksByGenre(genreId: String): List<BookAndGenre> =
         genreDao.getBooksByGenre(genreId).let { booksByGenre ->
             val books = booksByGenre.books ?: return emptyList()
 
