@@ -35,9 +35,7 @@ abstract class LibrarianDatabase : RoomDatabase() {
                 context,
                 LibrarianDatabase::class.java,
                 DATABASE_NAME
-            )
-                .allowMainThreadQueries()
-                .build()
+            ).build()
         }
     }
 

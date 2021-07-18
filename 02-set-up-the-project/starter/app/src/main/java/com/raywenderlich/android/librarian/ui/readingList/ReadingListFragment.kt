@@ -81,7 +81,7 @@ class ReadingListFragment : Fragment() {
   }
 
   private fun initListeners() {
-    pullToRefresh.isEnabled = false
+    pullToRefresh.isEnabled = true
 
     addReadingList.setOnClickListener {
       showAddReadingListDialog()

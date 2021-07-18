@@ -11,6 +11,7 @@ import com.raywenderlich.android.librarian.model.Review
 import com.raywenderlich.android.librarian.model.relations.BookAndGenre
 import com.raywenderlich.android.librarian.model.relations.BookReview
 import com.raywenderlich.android.librarian.model.relations.ReadingListsWithBooks
+import kotlinx.coroutines.flow.Flow
 
 class LibrarianRepositoryImpl(
     private val bookDao: BookDao,
@@ -33,13 +34,15 @@ class LibrarianRepositoryImpl(
 
     override fun addGenres(genres: List<Genre>) = genreDao.addGenres(genres)
 
-    override fun addReview(review: Review) = reviewDao.addReview(review)
+    override suspend fun addReview(review: Review) = reviewDao.addReview(review)
 
-    override fun removeReview(review: Review) = reviewDao.removeReview(review)
+    override suspend fun removeReview(review: Review) = reviewDao.removeReview(review)
 
-    override fun getReviewById(reviewId: String): BookReview = reviewDao.getReviewById(reviewId)
+    override suspend fun getReviewById(reviewId: String): BookReview = reviewDao.getReviewById(reviewId)
 
-    override fun getReviews(): List<BookReview> = reviewDao.getReviews()
+    override suspend fun getReviews(): List<BookReview> = reviewDao.getReviews()
+
+    override fun getReviewsFlow(): Flow<List<BookReview>> = reviewDao.getReviewsFlow()
 
     override fun updateReview(review: Review) = reviewDao.updateReview(review)
 
@@ -61,7 +64,7 @@ class LibrarianRepositoryImpl(
             return books.map { BookAndGenre(it, booksByGenre.genre) }
         }
 
-    override fun getBooksByRating(rating: Int): List<BookAndGenre> {
+    override suspend fun getBooksByRating(rating: Int): List<BookAndGenre> {
         val reviewsByRating = reviewDao.getReviewsByRating(rating)
 
         return reviewsByRating.map {
