@@ -77,7 +77,7 @@ class BookReviewsFragment : Fragment() {
   }
 
   private fun initListeners() {
-    pullToRefresh.isEnabled = false
+    pullToRefresh.isEnabled = true
 
     addBookReview.setOnClickListener {
       startActivityForResult(
