@@ -73,6 +73,7 @@ class ReadingListFragment : Fragment() {
   }
 
   private fun initUi() {
+    pullToRefresh.isEnabled = false
     readingListRecyclerView.layoutManager = LinearLayoutManager(context)
     readingListRecyclerView.adapter = adapter
   }
@@ -86,13 +87,9 @@ class ReadingListFragment : Fragment() {
   }
 
   private fun initListeners() {
-    pullToRefresh.isEnabled = false
-
     addReadingList.setOnClickListener {
       showAddReadingListDialog()
     }
-
-    pullToRefresh.setOnRefreshListener { loadReadingLists() }
   }
 
   private fun showAddReadingListDialog() {
@@ -116,7 +113,6 @@ class ReadingListFragment : Fragment() {
   private fun removeReadingList(readingList: ReadingListsWithBooks) {
     lifecycleScope.launch {
       repository.removeReadingList(ReadingList(readingList.id, readingList.name))
-      loadReadingLists()
     }
   }
 

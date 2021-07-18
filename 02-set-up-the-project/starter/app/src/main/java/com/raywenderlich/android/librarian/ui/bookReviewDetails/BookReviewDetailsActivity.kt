@@ -98,12 +98,12 @@ class BookReviewDetailsActivity : AppCompatActivity() {
         displayData(reviewId)
     }
 
-    private fun displayData(reviewId: String) {
+    private fun displayData(reviewId: String) = lifecycleScope.launch{
         refreshData(reviewId)
-        val data = bookReview ?: return
-        val genre = lifecycleScope.launch { repository.getGenreById(data.book.genreId) } as Genre
+        val data = bookReview ?: return@launch
+        val genre = repository.getGenreById(data.book.genreId)
 
-        Glide.with(this).load(data.review.imageUrl).into(bookImage)
+        Glide.with(this@BookReviewDetailsActivity).load(data.review.imageUrl).into(bookImage)
         reviewTitle.text = data.book.name
         reviewRating.rating = data.review.rating.toFloat()
         reviewDescription.text = data.review.notes
@@ -113,7 +113,7 @@ class BookReviewDetailsActivity : AppCompatActivity() {
 //        adapter.setData(data.review.entries)
     }
 
-    private fun refreshData(id: String) = lifecycleScope.launch {
+    private suspend fun refreshData(id: String) {
         val storedReview = repository.getReviewById(id)
 
         bookReview = storedReview
