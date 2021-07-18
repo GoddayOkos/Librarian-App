@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.raywenderlich.android.librarian.database.converters.DateConverter
+import com.raywenderlich.android.librarian.database.converters.ReadingEntryConverter
 import com.raywenderlich.android.librarian.database.dao.BookDao
 import com.raywenderlich.android.librarian.database.dao.GenreDao
 import com.raywenderlich.android.librarian.database.dao.ReadingListDao
@@ -28,7 +29,7 @@ const val DATABASE_VERSION = 2
                ],
     version = DATABASE_VERSION
 )
-@TypeConverters(DateConverter::class)
+@TypeConverters(DateConverter::class, ReadingEntryConverter::class)
 abstract class LibrarianDatabase : RoomDatabase() {
 
     companion object {
