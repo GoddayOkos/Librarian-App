@@ -2,6 +2,7 @@ package com.raywenderlich.android.librarian.database.dao
 
 import androidx.room.*
 import com.raywenderlich.android.librarian.model.ReadingList
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ReadingListDao {
@@ -11,6 +12,10 @@ interface ReadingListDao {
 
     @Query("SELECT * FROM readinglist")
     suspend fun getReadListing(): List<ReadingList>
+
+    @Transaction
+    @Query("SELECT * FROM readinglist")
+    fun getReadingListFlow(): Flow<List<ReadingList>>
 
     @Delete
     suspend fun removeReadingList(readingList: ReadingList)

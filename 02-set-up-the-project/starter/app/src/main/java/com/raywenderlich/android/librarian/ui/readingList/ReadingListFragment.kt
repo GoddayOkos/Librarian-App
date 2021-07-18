@@ -50,13 +50,15 @@ import com.raywenderlich.android.librarian.ui.readingListDetails.ReadingListDeta
 import com.raywenderlich.android.librarian.utils.createAndShowDialog
 import com.raywenderlich.android.librarian.utils.toast
 import kotlinx.android.synthetic.main.fragment_reading_list.*
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ReadingListFragment : Fragment() {
 
   private val adapter by lazy { ReadingListAdapter(::onItemSelected, ::onItemLongTapped) }
-
   private val repository by lazy { App.repository }
+  private val readingListsFlow by lazy { repository.getReadingListsFlow() }
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
@@ -75,13 +77,16 @@ class ReadingListFragment : Fragment() {
     readingListRecyclerView.adapter = adapter
   }
 
-  private fun loadReadingLists() = lifecycleScope.launch {
-    adapter.setData(repository.getReadingLists())
-    pullToRefresh.isRefreshing = false
+  private fun loadReadingLists() = lifecycleScope.launch{
+    readingListsFlow.catch { error ->
+      error.printStackTrace()
+    }.collect {
+      adapter.setData(it)
+    }
   }
 
   private fun initListeners() {
-    pullToRefresh.isEnabled = true
+    pullToRefresh.isEnabled = false
 
     addReadingList.setOnClickListener {
       showAddReadingListDialog()
