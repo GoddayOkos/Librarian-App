@@ -19,4 +19,10 @@ interface ReadingListDao {
 
     @Delete
     suspend fun removeReadingList(readingList: ReadingList)
+
+    @Query("SELECT * FROM readinglist WHERE id = :listId")
+    suspend fun getReadingListById(listId: String): ReadingList
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateReadingList(newReadingList: ReadingList)
 }

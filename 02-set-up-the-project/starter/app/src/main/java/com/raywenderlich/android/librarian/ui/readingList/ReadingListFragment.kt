@@ -112,7 +112,7 @@ class ReadingListFragment : Fragment() {
 
   private fun removeReadingList(readingList: ReadingListsWithBooks) {
     lifecycleScope.launch {
-      repository.removeReadingList(ReadingList(readingList.id, readingList.name))
+      repository.removeReadingList(ReadingList(readingList.id, readingList.name, emptyList()))
     }
   }
 
