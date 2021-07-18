@@ -59,4 +59,11 @@ class LibrarianRepositoryImpl(
 
     override fun removeReadingList(readingList: ReadingList) =
         readingListDao.removeReadingList(readingList)
+
+    override fun getBooksByGenre(genreId: String): List<BookAndGenre> =
+        genreDao.getBooksByGenre(genreId).let { booksByGenre ->
+            val books = booksByGenre.books ?: return emptyList()
+
+            return books.map { BookAndGenre(it, booksByGenre.genre) }
+        }
 }
