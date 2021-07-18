@@ -55,4 +55,7 @@ dependencies {
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2"
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2"
   implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
+
+  // Gson for parsing Json and POJO
+  implementation 'com.google.code.gson:gson:2.8.6'
 }
