@@ -35,7 +35,7 @@ interface LibrarianRepository {
 
     fun getReviewsFlow(): Flow<List<BookReview>>
 
-    fun updateReview(review: Review)
+    suspend fun updateReview(review: Review)
 
     suspend fun addReadingList(readingList: ReadingList)
 

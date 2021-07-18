@@ -46,7 +46,7 @@ class LibrarianRepositoryImpl(
 
     override fun getReviewsFlow(): Flow<List<BookReview>> = reviewDao.getReviewsFlow()
 
-    override fun updateReview(review: Review) = reviewDao.updateReview(review)
+    override suspend fun updateReview(review: Review) = reviewDao.updateReview(review)
 
     override suspend fun addReadingList(readingList: ReadingList) =
         readingListDao.addReadingList(readingList)

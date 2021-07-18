@@ -12,7 +12,7 @@ interface ReviewDao {
     suspend fun addReview(review: Review)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun updateReview(review: Review)
+    suspend fun updateReview(review: Review)
 
     @Query("SELECT * FROM review")
     suspend fun getReviews(): List<BookReview>

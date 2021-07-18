@@ -110,7 +110,7 @@ class BookReviewDetailsActivity : AppCompatActivity() {
         lastUpdated.text = formatDateToText(data.review.lastUpdatedDate)
         bookGenre.text = genre.name
 
-//        adapter.setData(data.review.entries)
+        adapter.setData(data.review.entries)
     }
 
     private suspend fun refreshData(id: String) {
@@ -133,27 +133,30 @@ class BookReviewDetailsActivity : AppCompatActivity() {
     private fun addNewEntry(readingEntry: ReadingEntry) {
         val data = bookReview?.review ?: return
 
-//        val updatedReview = data.copy(
-//            entries = data.entries + readingEntry,
-//            lastUpdatedDate = Date()
-//        )
+        val updatedReview = data.copy(
+            entries = data.entries + readingEntry,
+            lastUpdatedDate = Date()
+        )
 
-        // TODO update review
-        toast("Entry added!")
+        lifecycleScope.launch {
+            repository.updateReview(updatedReview)
+            toast("Entry added!")
 
-        displayData(data.id)
+            displayData(data.id)
+        }
     }
 
     private fun removeReadingEntry(readingEntry: ReadingEntry) {
         val data = bookReview ?: return
         val currentReview = data.review
 
-//        val newReview = currentReview.copy(
-//            entries = currentReview.entries - readingEntry,
-//            lastUpdatedDate = Date()
-//        )
-        // TODO update review
-
-        loadData()
+        val newReview = currentReview.copy(
+            entries = currentReview.entries - readingEntry,
+            lastUpdatedDate = Date()
+        )
+        lifecycleScope.launch {
+            repository.updateReview(newReview)
+            loadData()
+        }
     }
 }
